@@ -26,7 +26,7 @@ public class AllResultPagesLinks {
     //                       http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntDate=a:fut&evntWheelChairAccessible=1&distance=10&evntSurface=Road&cp=2
     
     
-    public void createUrl(String url){
+    public void getAllResultPageUrls(String url){
         try{
             //use Jsoup connect to point it to the correct page
             //use .get or the get HTTP protocol toreturn the web page.
@@ -34,20 +34,13 @@ public class AllResultPagesLinks {
                     .userAgent("Mozilla")
                     .timeout(3000)
                     .get();
-//            Elements table = doc.getElementsByClass(".paging td");
-//            //Elements links = table.getElementsByTag("a");
-//            for (Element link: table) {
-//                String href = link.attr("href");
-//                System.out.println(href);
-//            }
-            
+
             Elements links = doc.select("table.paging tbody tr td a");
-            //Elements links = block.getElementsByTag("a");
             System.out.println(links.size());
             for (Element link : links){
-                System.out.println("\nLink : " + "http://www.runnersworld.co.uk" + link.attr("href"));
+               if( link.attr("href").endsWith("11") ){break;}
+                System.out.println("\nLink : " + "http://www.runnersworld.co.uk/events/" + link.attr("href"));
                 System.out.println(link);
-                
                 
             }
         } catch (IOException e) {
