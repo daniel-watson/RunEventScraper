@@ -14,38 +14,29 @@ import org.jsoup.select.Elements;
  *
  * @author danielwatson
  */
-public class AllResultPagesLinks {
+public class AllResultPagesLinks extends Link{
+    private String url;
+    //private Document doc;
     
-    public AllResultPagesLinks(){
+    public AllResultPagesLinks(String url){
+        super(url);
     }
+   
     
-    //    String url      = "http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntTitle=&evntDate=a%3afut&distance=&county=&area=&distanceFromHome=&evntSurface=&evntGround=&evntWheelChairAccessible=";
-    //                       http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntDate=a:fut&cp=1
-    //    String urlPage2 = "http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntDate=a:fut&cp=2";
-    //    String urlPage3 = "http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntDate=a:fut&cp=3";
-    //                       http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntDate=a:fut&evntWheelChairAccessible=1&distance=10&evntSurface=Road&cp=2
-    
-    
-    public void getAllResultPageUrls(String url){
-        try{
-            //use Jsoup connect to point it to the correct page
-            //use .get or the get HTTP protocol toreturn the web page.
-            Document doc = Jsoup.connect(url)
-                    .userAgent("Mozilla")
-                    .timeout(3000)
-                    .get();
+    public String getAllResultPageUrls(){ 
+        String s = "";
+              Document doc = connectToLink();
 
             Elements links = doc.select("table.paging tbody tr td a");
-            System.out.println(links.size());
+            // System.out.println(links.size());
             for (Element link : links){
-               if( link.attr("href").endsWith("11") ){break;}
-                System.out.println("\nLink : " + "http://www.runnersworld.co.uk/events/" + link.attr("href"));
-                System.out.println(link);
-                
+                if( link.attr("href").endsWith("11") )
+                {
+                    break;
+                }
+                 s = s + "\nLink : " + "http://www.runnersworld.co.uk/events/" + link.attr("href");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            return s;
     }
 }
 
