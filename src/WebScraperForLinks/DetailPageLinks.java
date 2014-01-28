@@ -15,23 +15,18 @@ import org.jsoup.select.Elements;
  *
  * @author danielwatson
  */
-public class DetailPageLink extends Link{
+public class DetailPageLinks extends Link{
     private String url;
     //private Document doc;
     ArrayList<String> resultPages = new ArrayList<String>();
     Elements links = null;
-    public DetailPageLink(String url) {
+    public DetailPageLinks(String url) {
         super(url);
     }
     
-    @Override
-    public String toString() {
-        return "Link{" + "URL=" + url + '}';
-    }
-    
-    public String getURL() {
+    public String getDetailURL() {
         String s ="";
-        Elements links = getDetailPageURLs(url);
+        Elements links = getDetailPageURLs();
         for (Element link : links) {
             if( link.attr("href").contains("viewevent") ){
                 s = s + "\nLink : " + "http://www.runnersworld.co.uk" + link.attr("href");
@@ -43,7 +38,7 @@ public class DetailPageLink extends Link{
     }
     
     
-    public Elements getDetailPageURLs(String URL) {
+    public Elements getDetailPageURLs() {
         Document doc = connectToLink();
         //Finds matching elements. it will look in for a class named evntTitle.
         //It will then save any <ahref> links to the list links
