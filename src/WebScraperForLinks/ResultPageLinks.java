@@ -32,7 +32,7 @@ public class ResultPageLinks{
             //use .get or the get HTTP protocol toreturn the web page.
              doc = Jsoup.connect(url)
                     .userAgent("Mozilla")
-                    .timeout(3000)
+                    .timeout(30000)
                     .get();                       
             
         } catch (IOException e) {
@@ -42,27 +42,32 @@ public class ResultPageLinks{
         
     }
     public ArrayList getUrls(String url) {
+        int i = 0;
+        resultList.add(i,url);
         doc = connectToLink(url);
         //Finds matching elements. it will look in for a class named evntTitle.
         //It will then save any <ahref> links to the list links
+        
         Elements links = doc.select("table.paging tbody tr td a");
-        int i = 0;
+        
         for (Element link : links){
             if( link.attr("href").endsWith("11") )
             {
                 break;
             }
+             i++;
             String s =  "http://www.runnersworld.co.uk/events/" + link.attr("href");
             resultList.add(i,s);
-            i++;
         }
         return resultList;
     }
-    public void displayDetailURLs(){
+    public String displayResultDetailURLs(){
+        String s = "";
         for (String link : resultList)
         {
-            System.out.println(link);
+            s = s + link + "\n";
         }
+        return s;
     }
 }
 

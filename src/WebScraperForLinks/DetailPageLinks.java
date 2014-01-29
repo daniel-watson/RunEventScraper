@@ -24,16 +24,15 @@ public class DetailPageLinks{
     
     public DetailPageLinks() {
         detailResultList = new ArrayList<String>();
-        resultList = new ArrayList<String>();
+        //resultList = new ArrayList<String>();
     }
     public Document connectToLink(String url){
         try{
-            //url = "http://www.runnersworld.co.uk/events/foundevents.asp?v=2&evntTitle=&evntDate=a%3afut&distance=&county=&area=&distanceFromHome=&evntSurface=&evntGround=&evntWheelChairAccessible=";
             //use Jsoup connect to point it to the correct page
             //use .get or the get HTTP protocol toreturn the web page.
             doc = Jsoup.connect(url)
                     .userAgent("Mozilla")
-                    .timeout(3000)
+                    .timeout(30000)
                     .get();
             
         } catch (IOException e) {
@@ -41,6 +40,37 @@ public class DetailPageLinks{
         }
         return doc;
         
+    }
+    
+    
+    public ArrayList getUrls(String url) {
+        //ResultPageLinks RPL = new ResultPageLinks();
+        //resultList = RPL.getUrls(url);
+        String s ="";
+        //for(String resultLink : resultList) {
+        Document doc = connectToLink(url);
+        //Finds matching elements. it will look in for a class named evntTitle.
+        //It will then save any <ahref> links to the list links
+        Elements links = doc.select(".evntTitle > a[href]");
+        
+        int i = 0;
+        for (Element link : links){
+            if( link.attr("href").contains("viewevent") ){
+                s = "http://www.runnersworld.co.uk" + link.attr("href");
+                detailResultList.add(i,s);
+                i++;
+            }
+            
+        }
+        //}
+        return detailResultList;
+    }
+    
+    public void displayDetailURLs(){
+        for (String link : detailResultList)
+        {
+            System.out.println(link);
+        }
     }
     
     
@@ -56,34 +86,4 @@ public class DetailPageLinks{
     //        }
     //        return s;
     //    }
-    
-    public ArrayList getUrls(String url) {
-        ResultPageLinks RPL = new ResultPageLinks();
-        resultList = RPL.getUrls(url);
-        String s ="";
-        for(String resultLink : resultList) {
-            Document doc = connectToLink(resultLink);
-            //Finds matching elements. it will look in for a class named evntTitle.
-            //It will then save any <ahref> links to the list links
-            Elements links = doc.select(".evntTitle > a[href]");
-
-            int i = 0;
-            for (Element link : links){
-                if( link.attr("href").contains("viewevent") ){
-                    System.out.println( "http://www.runnersworld.co.uk" + link.attr("href"));
-                    detailResultList.add(i,s);
-                    i++;
-                }
-                
-            }
-        }
-        return detailResultList;
-    }
-    
-    public void displayDetailURLs(){
-        for (String link : detailResultList)
-        {
-            System.out.println(link);
-        }
-    }
 }
